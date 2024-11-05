@@ -29,6 +29,10 @@ Route::middleware('auth')->group(function(){
 
     //word
     Route::get('/word', 'WordController@index')->name('word.index');
+    Route::get('/word/create', 'WordController@create')->name('word.create');
+    Route::post('/word', 'WordController@store')->name('word.store');
+    Route::post('/worddetail', 'WordControllerpupdate')->name('word.detail');
+
 });
 
 Auth::routes();

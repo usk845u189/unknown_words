@@ -4,11 +4,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            
             <div class="panel">
                 <div class="card">
                     <div class="card-header">
                         <h4>単語リスト</h4>
+                        <a href="/word/create" class="btn btn-primary w-100 text-end">作成</a>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -36,7 +36,6 @@
                     </table>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>
