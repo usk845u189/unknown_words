@@ -45,12 +45,19 @@ class WordController extends Controller
     public function update(Request $request)
     {
         $request = validate([
-            'word' = 'required|string', 
-            'detail' = 'required|string', 
-            'body' = 'required|string'
+            'word' => 'required|string', 
+            'detail' => 'required|string', 
+            'body' => 'required|string'
         ]);
 
-        $word = new Word();
+        $word = Word::findOrFail($id);
+        $word -> update([
+            'word' => $request->input('word'), 
+            'detail' => $request->input('detail'), 
+            'body' => $request->input('body')
+        ]);
+
+        return redirect("word/");
           
     }
 }
