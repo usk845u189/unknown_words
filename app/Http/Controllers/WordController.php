@@ -36,15 +36,15 @@ class WordController extends Controller
         return redirect("word/");
     }
 
-    public function detail(Request $request)
+    public function detail(Request $request, $id)
     {
         $word = Word::find($id )->toArray();
-        return view('post.detail', ['word'=>$word]);
+        return view('word.detail', ['word'=>$word]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $request = validate([
+        $request->validate([
             'word' => 'required|string', 
             'detail' => 'required|string', 
             'body' => 'required|string'

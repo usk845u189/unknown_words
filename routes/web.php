@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/word', 'WordController@index')->name('word.index');
     Route::get('/word/create', 'WordController@create')->name('word.create');
     Route::post('/word', 'WordController@store')->name('word.store');
-    Route::get('/word/detail', 'WordController@detail')->name('word.detail');
+    Route::get('/word/detail/{id}', 'WordController@detail')->name('word.detail');
     Route::patch('/word/update/{id}', 'WordController@update')->name('word.update');
 
 });

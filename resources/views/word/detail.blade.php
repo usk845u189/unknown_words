@@ -8,7 +8,7 @@
                 <div class="panel-heading">単語詳細</div>
             </div>
             <div class="panel-body">
-                <form method="post" action="/word/update">
+                <form method="post" action="/word/update/{{$word->id}}">
                     {{ csrf_field() }}
                     <label for="text">単語</label>
                     <input type="text" name="word" value="{{ $word->word }}">

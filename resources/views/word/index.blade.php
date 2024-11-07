@@ -28,7 +28,7 @@
                                 <td>{{ $word->id }}</td>
                                 <td>{{ $word->word }}</td>
                                 <td>{{ $word->detail }}</td>
-                                <td><a href="/word/update/{{ $word->id }}" class="btn btn-success">追記</a></td>
+                                <td><a href="/word/detail/{{ $word->id }}" class="btn btn-success">追記</a></td>
                                 <td><button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#del_modal">削除</td>
                             </tr>
                         </tbody>
