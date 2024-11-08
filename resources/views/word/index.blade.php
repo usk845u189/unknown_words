@@ -18,7 +18,7 @@
                                 <td>ID</td>
                                 <td>単語</td>
                                 <td>わからないところ</td>
-                                <td>追記</td>
+                                <td>詳細</td>
                                 <td>削除</td>
                             </tr>
                         </thead>
@@ -28,8 +28,14 @@
                                 <td>{{ $word->id }}</td>
                                 <td>{{ $word->word }}</td>
                                 <td>{{ $word->detail }}</td>
-                                <td><a href="/word/detail/{{ $word->id }}" class="btn btn-success">追記</a></td>
-                                <td><button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#del_modal">削除</td>
+                                <td><a href="/word/detail/{{ $word->id }}" class="btn btn-success">詳細</a></td>
+                                <td>
+                                    <form method="POST" action="/word/delete/{{ $word->id }}">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="_method" value="delete">
+                                        <button type="submit" class="btn btn-danger">削除</button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                         @endforeach
@@ -41,23 +47,4 @@
 </div>
 @endsection
 
-{{-- 削除確認用モーダル --}}
-<div class="modal fade" id="del_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">削除確認</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            この行を削除しますか？
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-            <form action="/word/delete/#" method='POST'> {{-- #に削除を押した単語のidを与えたいがやり方がわからない bladeを確認 --}}
-            <input type="submit" class="btn btn-danger" value="削除">
-        </form>
-        </div>
-        </div>
-    </div>
-</div>
+

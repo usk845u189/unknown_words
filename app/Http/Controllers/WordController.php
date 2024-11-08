@@ -38,7 +38,8 @@ class WordController extends Controller
 
     public function detail(Request $request, $id)
     {
-        $word = Word::find($id )->toArray();
+        $word = Word::find($id)->toArray();
+        // dd(optional($word["id"]));
         return view('word.detail', ['word'=>$word]);
     }
 
@@ -50,15 +51,25 @@ class WordController extends Controller
             'body' => 'required|string'
         ]);
 
-        $word = Word::findOrFail($id);
-        $word -> update([
-            'word' => $request->input('word'), 
-            'detail' => $request->input('detail'), 
-            'body' => $request->input('body')
-        ]);
+        $word = Word::find($id);
+        // $word -> update([
+        //     'word' => $request->input('word'), 
+        //     'detail' => $request->input('detail'), 
+        //     'body' => $request->input('body')
+        // ]);
+        $word->word = $request->word;
+        $word->detail = $request->detail;
+        $word->body = $request->body;
+        $word->save();
 
         return redirect("word/");
           
     }
+
+    public function delete(Request $request, $id)
+    {
+        $word = Word::find($id);
+        $word->delete();
+        return redirect("word/");
+    }
 }
-// ['words' => $words]

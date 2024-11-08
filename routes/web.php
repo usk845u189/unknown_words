@@ -11,7 +11,7 @@
 |
 */
 
-
+use App\Http\Controllers\WordController;
 
 Route::middleware('auth')->group(function(){
     Route::get('/', function () {
@@ -32,7 +32,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/word/create', 'WordController@create')->name('word.create');
     Route::post('/word', 'WordController@store')->name('word.store');
     Route::get('/word/detail/{id}', 'WordController@detail')->name('word.detail');
-    Route::patch('/word/update/{id}', 'WordController@update')->name('word.update');
+    Route::put('/word/update/{id}', 'WordController@update')->name('word.update');
+    Route::delete('/word/delete/{id}', 'WordController@delete')->name('word.delete');
 
 });
 
