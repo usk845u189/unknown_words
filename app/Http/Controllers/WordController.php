@@ -16,6 +16,15 @@ class WordController extends Controller
     public function create(Request $request)
     {
         return view('word.create');
+
+        // ajax通信用
+        // $word = new Word();
+        // $word->word = $request->input('word');
+        // $word->detail = $request->input('detail');
+        // $word->body = $request->input('body');
+        // $word->save();
+
+        // return response()->json($word);
     }
 
     public function store(Request $request)
@@ -34,6 +43,9 @@ class WordController extends Controller
         $word->save();
 
         return redirect("word/");
+
+        // ajax通信で非同期で画面の更新を行う場合はこっちを使う
+        // return response()->json($word);
     }
 
     public function detail(Request $request, $id)
