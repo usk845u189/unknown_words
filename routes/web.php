@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function(){
 
     //word
     Route::get('/word', 'WordController@index')->name('word.index');
-    Route::get('/word/create', 'WordController@create')->name('word.create');
+    // Route::get('/word/create', 'WordController@create')->name('word.create');Ajaxの時は使わない
     Route::post('/word', 'WordController@store')->name('word.store');
     Route::get('/word/detail/{id}', 'WordController@detail')->name('word.detail');
     Route::put('/word/update/{id}', 'WordController@update')->name('word.update');

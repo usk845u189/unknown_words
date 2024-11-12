@@ -16,15 +16,6 @@ class WordController extends Controller
     public function create(Request $request)
     {
         return view('word.create');
-
-        // ajax通信用
-        // $word = new Word();
-        // $word->word = $request->input('word');
-        // $word->detail = $request->input('detail');
-        // $word->body = $request->input('body');
-        // $word->save();
-
-        // return response()->json($word);
     }
 
     public function store(Request $request)
@@ -32,7 +23,7 @@ class WordController extends Controller
         $request->validate([
             'word' => 'required|string', 
             'detail' => 'required|string', 
-            'body' => 'required|string',
+            'body' => 'nullable|string',
         ]);
 
         $word = new Word();
@@ -42,10 +33,10 @@ class WordController extends Controller
         $word->body = $request->body;
         $word->save();
 
-        return redirect("word/");
+        // return redirect("word/");
 
         // ajax通信で非同期で画面の更新を行う場合はこっちを使う
-        // return response()->json($word);
+        return response()->json(['success' => true, 'word' => $word]);
     }
 
     public function detail(Request $request, $id)
@@ -60,7 +51,7 @@ class WordController extends Controller
         $request->validate([
             'word' => 'required|string', 
             'detail' => 'required|string', 
-            'body' => 'required|string'
+            'body' => 'nullable|string'
         ]);
 
         $word = Word::find($id);

@@ -8,7 +8,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>単語リスト</h4>
-                        <a href="/word/create" class="btn btn-primary w-100 text-end" id="createBtn">作成</a>
+                        <button class="btn btn-primary w-100 text-end" id="createBtn">作成</button>
+                        {{-- <a href="/word/create" class="btn btn-primary w-100 text-end" id="createBtn">作成</a> --}}
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -46,53 +47,73 @@
     </div>
 </div>
 
-<div class="container" id="createForm" style="display:none;">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                    <div class="panel-heading">追加単語</div>
-            </div>
-            <div class="panael-body">
-                <form method="POST" action="/word">
-                    {{ csrf_field() }}
-                    <label for="text">単語</label><br>
-                    <input type="text" name="word" cols="10">
-                    <hr>
-                    <label for="text">わからなかったところ</label><br>
-                    <input type="text" name="detail" style="width:720px">
-                    <hr>
-                    <label for="textarea">内容</label><br>
-                    <textarea name="body" id="body" style="width:720px"></textarea>
-                    <br>
-                    <button type="submit" class="btn btn-primary" id="saveBtn">登録</button>
-                </form>
+<div class="container" >
+    <div class="modal fade" id="wordModal" tabindex="-1" aria-labelledby="wordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wordModalLabel">単語を追加</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="wordForm" method="POST" action="/word" autocomplete="off">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label for="word">単語</label>
+                            <input type="text" class="form-control" name="word" id="word" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="detail">わからなかったところ</label>
+                            <input type="text" class="form-control" name="detail" id="detail" style="width:100%">
+                        </div>
+                        <div class="form-group">
+                            <label for="body">内容</label>
+                            <textarea class="form-control" name="body" id="body" style="width:100%"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="saveBtn">登録</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 <script>
     $(function() {
         $('#createBtn').click(function() {
-            $('#createForm').toggle();
+            $('#wordModal').modal('show');
         });
 
-        $('#saveBtn').click(function(){
+        $('#saveBtn').click(function(e){
+            e.preventDefault();
+
             $.ajax({
                 method: "POST", 
-                url: "word/", 
+                url: "/word", 
                 data: {
-                    "_token": "{{ csrf_token() }}", 
-                    word: $("input[name='word']").val(), 
-                    detail: $("input[name='detail']").val(), 
-                    body: $("input[name='body']").val()
+                    word: $('#word').val(), 
+                    detail: $('#detail').val(), 
+                    body: $('#body').val(), 
+                    _token: $('input[name="_token"]').val()
                 }, 
-                success: function(res) {
-                    $()
+                success: function(response) {
+                    alert('単語が追加されました。')
+                    $('#wordModal').modal('hide');
+
+                    // モーダルの中を空に（もっといい方法があるはず）
+                    let word = document.getElementById('name');
+                    word.val = '';
+                    let detail = document.getElementById('detail');
+                    detail.val = '';
+                    let body = document.getElementById('body');
+                    body.val = '';
+                }, 
+                error: function() {
+                    alert('エラーが発生しました。')
                 }
-            })
-        })
-    })
+                
+            });
+        });
+    });
 </script>
 
 @endsection
