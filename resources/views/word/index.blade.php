@@ -86,6 +86,10 @@
         $('#saveBtn').click(function(e){
             e.preventDefault();
 
+            let word = document.getElementById('word');
+            let detail = document.getElementById('detail');
+            let body = document.getElementById('body');
+
             $.ajax({
                 method: "POST", 
                 url: "/word", 
@@ -96,19 +100,34 @@
                     _token: $('input[name="_token"]').val()
                 }, 
                 success: function(response) {
-                    alert('単語が追加されました。')
+                    alert('単語が追加されました。') 
+                    let newWordRow = `
+                    <tbody>
+                        <tr> 
+                            <td>${response.word.id}</td>
+                            <td>${response.word.word}</td>
+                            <td>${response.word.detail}</td>
+                            <td><a href="/word/detail/${response.word.id}" class="btn btn-success">詳細</a></td>
+                            <td>
+                                <form method="POST" action="/word/delete/${response.word.id}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit" class="btn btn-danger">削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    `;
+                    $('table').append(newWordRow);
+                    
                     $('#wordModal').modal('hide');
-
-                    // モーダルの中を空に（もっといい方法があるはず）
-                    let word = document.getElementById('name');
-                    word.val = '';
-                    let detail = document.getElementById('detail');
-                    detail.val = '';
-                    let body = document.getElementById('body');
-                    body.val = '';
+                    $('#wordForm')[0].reset();
                 }, 
                 error: function() {
                     alert('エラーが発生しました。')
+                    if (!word.value) {alert('単語を入力してください');}
+                    if (!detail.value) {alert('わからなかったところを入力してください');}
+                    if (!body.value) {alert('内容を入力してください');}
                 }
                 
             });
