@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Word;
 
 class WordTest extends TestCase
 {
@@ -17,7 +18,7 @@ class WordTest extends TestCase
     {
         $this->assertTrue(true);
     }
-
+// 
     /**
      * ユーザー登録
      *
@@ -62,5 +63,35 @@ class WordTest extends TestCase
     {
         $response = $this->get('/word');
         $response->assertStatus(200);
+    }
+
+    /**
+     * メインページの見た目
+     *
+     * @return void
+     */
+    public function testTopPageView()
+    {
+        $this->visit('/word')
+        ->see('ID')
+        ->see('単語')
+        ->see('わからないところ')
+        ->see('詳細')
+        ->see('削除');
+    }
+
+    /**
+     *　入力画面のテスト
+     *　入力画面を開いて値を入力し、適切にDBに記録されるのか？
+     * @return void
+     */
+    public function store()
+    {
+       $this->assertAuthenticated();
+
+       $word = Word::factory()->create()
+            ->actingAs($word)
+            ->post('/word');
+
     }
 }
