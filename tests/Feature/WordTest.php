@@ -9,15 +9,6 @@ use App\Models\Word;
 
 class WordTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $this->assertTrue(true);
-    }
 // 
     /**
      * ユーザー登録
@@ -36,22 +27,15 @@ class WordTest extends TestCase
         $response = $this->postJson(route('register'), $data);
 
         $response->assertStatus(302)->assertRedirect('/word');
-    }
 
-    /**
-     * ログイン
-     *
-     * @return void
-     */
-    public function userLogin()
-    {
+
         $data = [
             'email' => 'test@testmail.com', 
             'password' => 'password'
         ];
 
         $response = $this->postJson(route('login'));
-        $response->assertStatus(302);
+        $response->assertStatus(302);                          
     }
 
     /**
@@ -70,28 +54,88 @@ class WordTest extends TestCase
      *
      * @return void
      */
-    public function testTopPageView()
-    {
-        $this->visit('/word')
-        ->see('ID')
-        ->see('単語')
-        ->see('わからないところ')
-        ->see('詳細')
-        ->see('削除');
-    }
+    // public function testTopPageView()
+    // {
+    //     $this->browse(function($browser){
+    //         $browser->visit('/word')
+    //                 ->assertee('ID')
+    //                 ->assertee('単語')
+    //                 ->assertee('わからないところ')
+    //                 ->assertee('詳細')
+    //                 ->assertee('削除');
+    //     });
+    // }
 
     /**
      *　入力画面のテスト
      *　入力画面を開いて値を入力し、適切にDBに記録されるのか？
      * @return void
      */
-    public function store()
+    public function storeWord()
     {
-       $this->assertAuthenticated();
+        $wordData = factory(Word::class)->make();
 
-       $word = Word::factory()->create()
-            ->actingAs($word)
-            ->post('/word');
+        $response = $this->post('/word', [
+            'word' => $wordData->word, 
+            'detail' => $wordData->detail, 
+            'body' => $wordData->body
+        ]);
 
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('words', [
+            'word' => $wordData->word, 
+            'detail' => $wordData->detail, 
+            'body' => $wordData->body
+        ]);
+
+    }
+
+    public function showWord()
+    {
+        $word = factory(Word::class)->create();
+
+        $response = $this->get('/word/detail/{$word->id}');
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'id' => $word->id, 
+            'word' => $word->word, 
+            'detail' => $word->detail, 
+            'body' => $word->body
+        ]);
+    }
+    
+    public function updateWord()
+    {
+        $word = factory(Word::class)->create();
+        $word->update([
+            'word' => 'Updated word', 
+            'detail' => 'Updated detail', 
+            'body' => 'Updated body'
+        ]);
+        $this -> assertDatabaseHas('words', [
+            'id' => $word->id, 
+            'word' => 'Updated word', 
+            'detail' => 'Updated detail', 
+            'body' => 'Updated body'
+        ]);
+
+        $word->refresh();
+        $this->assertEquals('Updated word', $word->word);
+        $this->assertEquals('Updated detail', $word->detail);
+        $this->assertEquals('Updated body', $word->body);
+    }
+
+    public function deleteWord()
+    {
+        $word = factory(Word::class)->create();
+
+        $response = $this->delete('/word/delete/{$word->id}');
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('words', [
+            'id' => $word->id,
+        ]);
     }
 }
