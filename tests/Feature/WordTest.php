@@ -9,7 +9,7 @@ use App\Models\Word;
 
 class WordTest extends TestCase
 {
-// 
+
     /**
      * ユーザー登録
      *
@@ -18,10 +18,10 @@ class WordTest extends TestCase
     public function testUserRegister()
     {
         $data = [
-            'name' => 'Test User1', 
-            'email' => 'test@testmail.com', 
-            'password' => 'password', 
-            'password_confirmation' => 'password' 
+            'Name' => 'Test User1', 
+            'Email Address' => 'test@testmail.com', 
+            'Password' => 'password', 
+            'Confirm password' => 'password' 
         ];
 
         $response = $this->postJson(route('register'), $data);
@@ -48,23 +48,6 @@ class WordTest extends TestCase
         $response = $this->get('/word');
         $response->assertStatus(200);
     }
-
-    /**
-     * メインページの見た目
-     *
-     * @return void
-     */
-    // public function testTopPageView()
-    // {
-    //     $this->browse(function($browser){
-    //         $browser->visit('/word')
-    //                 ->assertee('ID')
-    //                 ->assertee('単語')
-    //                 ->assertee('わからないところ')
-    //                 ->assertee('詳細')
-    //                 ->assertee('削除');
-    //     });
-    // }
 
     /**
      *　入力画面のテスト
