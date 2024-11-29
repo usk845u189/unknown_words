@@ -77,6 +77,19 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
+        
+        'local_test' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'mysql'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'test',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', 'root_password'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+        ],
 
     ],
 

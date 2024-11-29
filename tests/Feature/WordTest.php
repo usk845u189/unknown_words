@@ -9,6 +9,7 @@ use App\Models\Word;
 
 class WordTest extends TestCase
 {
+    use RefreshDatabase;
 
     /**
      * ユーザー登録
@@ -17,14 +18,20 @@ class WordTest extends TestCase
      */
     public function testUserRegister()
     {
+        //csrfで止まっているのでトークンの設置をする
+        $csrf_token = csrf_token();
+
         $data = [
-            'Name' => 'Test User1', 
-            'Email Address' => 'test@testmail.com', 
-            'Password' => 'password', 
-            'Confirm password' => 'password' 
+            'id' => 1, 
+            'name' => 'Test User1', 
+            'email' => 'test@testmail.com', 
+            'password' => 'password', 
+            'password_confirmation' => 'password' 
         ];
 
         $response = $this->postJson(route('register'), $data);
+
+        // $response->dump();
 
         $response->assertStatus(302)->assertRedirect('/word');
 
@@ -43,7 +50,7 @@ class WordTest extends TestCase
      *
      * @return void
      */
-    public function openTopPage()
+    public function testOpenTopPage()
     {
         $response = $this->get('/word');
         $response->assertStatus(200);
@@ -54,7 +61,7 @@ class WordTest extends TestCase
      *　入力画面を開いて値を入力し、適切にDBに記録されるのか？
      * @return void
      */
-    public function storeWord()
+    public function testStoreWord()
     {
         $wordData = factory(Word::class)->make();
 
@@ -74,7 +81,7 @@ class WordTest extends TestCase
 
     }
 
-    public function showWord()
+    public function testShowWord()
     {
         $word = factory(Word::class)->create();
 
@@ -90,7 +97,7 @@ class WordTest extends TestCase
         ]);
     }
     
-    public function updateWord()
+    public function testUpdateWord()
     {
         $word = factory(Word::class)->create();
         $word->update([
@@ -111,7 +118,7 @@ class WordTest extends TestCase
         $this->assertEquals('Updated body', $word->body);
     }
 
-    public function deleteWord()
+    public function testDeleteWord()
     {
         $word = factory(Word::class)->create();
 
@@ -120,5 +127,6 @@ class WordTest extends TestCase
         $this->assertDatabaseMissing('words', [
             'id' => $word->id,
         ]);
+        // $response->dump();
     }
 }
