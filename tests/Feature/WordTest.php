@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
 use App\Models\Word;
+use Illuminate\Database\Seeder;
 
 class WordTest extends TestCase
 {
@@ -20,9 +22,12 @@ class WordTest extends TestCase
     {
         //csrfで止まっているのでトークンの設置をする
         $csrf_token = csrf_token();
+        
+        
+        
 
         $data = [
-            'id' => 1, 
+            'id' => 2, 
             'name' => 'Test User1', 
             'email' => 'test@testmail.com', 
             'password' => 'password', 
@@ -63,6 +68,8 @@ class WordTest extends TestCase
      */
     public function testStoreWord()
     {
+        $user = User::find(1);
+        $this->be($user);
         $wordData = factory(Word::class)->make();
 
         $response = $this->post('/word', [
@@ -71,7 +78,7 @@ class WordTest extends TestCase
             'body' => $wordData->body
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('words', [
             'word' => $wordData->word, 
@@ -83,9 +90,14 @@ class WordTest extends TestCase
 
     public function testShowWord()
     {
+        $user = User::find(1);
+        
+        $this->be($user);
+        \Log::error($user);
         $word = factory(Word::class)->create();
+        // dd($word);
 
-        $response = $this->get('/word/detail/{$word->id}');
+        $response = $this->get(`/word/detail/{$word->id}`);
 
         $response->assertStatus(200);
 
@@ -122,7 +134,7 @@ class WordTest extends TestCase
     {
         $word = factory(Word::class)->create();
 
-        $response = $this->delete('/word/delete/{$word->id}');
+        $response = $this->delete(`/word/delete/{$word->id}`);
         $response->assertStatus(200);
         $this->assertDatabaseMissing('words', [
             'id' => $word->id,

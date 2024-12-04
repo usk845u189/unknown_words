@@ -28,10 +28,13 @@ class WordController extends Controller
 
         $word = new Word();
         $word->user_id = \Auth::id();
+        
         $word->word = $request->word;
         $word->detail = $request->detail;
         $word->body = $request->body;
         $word->save();
+
+        \Log::error($word);
 
         // return redirect("word/");
 
