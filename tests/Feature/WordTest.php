@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\Controller;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,7 +21,9 @@ class WordTest extends TestCase
      */
     public function testUserRegister()
     {
-        //csrfで止まっているのでトークンの設置をする
+        session()->flush();
+
+        //csrfで止まって1いるのでトークンの設置をする
         $csrf_token = csrf_token();
         
         
