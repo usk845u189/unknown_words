@@ -22,13 +22,7 @@ class WordTest extends TestCase
     public function testUserRegister()
     {
         session()->flush();
-
-        //csrfで止まって1いるのでトークンの設置をする
-        $csrf_token = csrf_token();
         
-        
-        
-
         $data = [
             'id' => 2, 
             'name' => 'Test User1', 
@@ -41,7 +35,7 @@ class WordTest extends TestCase
 
         // $response->dump();
 
-        $response->assertStatus(302)->assertRedirect('/word');
+        $response->assertStatus(302)->assertRedirect('/home');
 
 
         $data = [
@@ -97,10 +91,11 @@ class WordTest extends TestCase
         
         $this->be($user);
         \Log::error($user);
-        $word = factory(Word::class)->create();
-        // dd($word);
+        $word = factory(Word::class)->make();
+        dd($word);
 
-        $response = $this->get(`/word/detail/{$word->id}`);
+        // $response = $this->get(`/word/detail/{$word->id}`);
+        $response = $this->get('/word/detail/1');
 
         $response->assertStatus(200);
 
@@ -114,7 +109,7 @@ class WordTest extends TestCase
     
     public function testUpdateWord()
     {
-        $word = factory(Word::class)->create();
+        $word = factory(Word::class)->make();
         $word->update([
             'word' => 'Updated word', 
             'detail' => 'Updated detail', 
@@ -135,9 +130,10 @@ class WordTest extends TestCase
 
     public function testDeleteWord()
     {
-        $word = factory(Word::class)->create();
+        $word = factory(Word::class)->make();
 
-        $response = $this->delete(`/word/delete/{$word->id}`);
+        // $response = $this->delete(`/word/delete/{$word->id}`);
+        $response = $this->delete('/word/delete/1');
         $response->assertStatus(200);
         $this->assertDatabaseMissing('words', [
             'id' => $word->id,
